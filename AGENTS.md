@@ -46,13 +46,9 @@ cd project/web && pnpm dev
 
 **Important**: Always use `NX_NO_CLOUD=true` and `--skip-nx-cache` for backend services to avoid Nx cloud cache permission issues in Cloud Agent environments.
 
-### Known issue: aitoearn-server runtime error
+### @nestjs/mongoose @Prop decorator caveat
 
-The `aitoearn-server` currently fails at runtime with:
-```
-Error: Cannot determine a type for the "PublishErrorData.originalData" field
-```
-This is a pre-existing `@nestjs/mongoose@11` issue in `libs/mongodb/src/schemas/publishing-task-meta.schema.ts:138` where `@Prop({ required: false })` is used on an `any`-typed property without specifying `type: Schema.Types.Mixed`. The `aitoearn-channel` service is unaffected because it doesn't load this schema at runtime.
+When adding `@Prop()` to a property typed as `any` in Mongoose schemas, always specify `type: mongoose.Schema.Types.Mixed` explicitly. Without it, `@nestjs/mongoose@11` throws `Cannot determine a type` at runtime. See `libs/mongodb/src/schemas/publishing-task-meta.schema.ts` and `publishRecord.schema.ts` for examples.
 
 ### Lint
 
