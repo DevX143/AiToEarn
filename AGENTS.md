@@ -64,4 +64,17 @@ When adding `@Prop()` to a property typed as `any` in Mongoose schemas, always s
 
 The backend has `simple-git-hooks` with `lint-staged` pre-commit hook that runs `pnpm lint-staged` from the backend directory. Use `--no-verify` when committing from the repository root since the hook expects a `package.json` in the current directory.
 
+### Vercel deployment (web frontend)
+
+The web frontend is deployed to Vercel under the `luckycuizons-projects` scope, project name `web`.
+
+```bash
+cd project/web
+vercel deploy --prod --yes --token "$VERCEL_TOKEN" --scope luckycuizons-projects
+```
+
+Environment variables are configured in Vercel for production. The `NEXT_PUBLIC_API_URL` points to `https://aitoearn.ai/api` (the production backend). To use a different backend, update this env var in the Vercel dashboard or via `vercel env rm` / `vercel env add`.
+
+**Note**: Only the web frontend runs on Vercel. The backend (NestJS + MongoDB + Redis) requires a server platform (Docker, VPS, Railway, etc.) and cannot run on Vercel's serverless infrastructure.
+
 See `project/backend/DEVELOPER_GUIDE.md` for comprehensive backend development documentation and `project/backend/CLAUDE.md` for coding conventions.
